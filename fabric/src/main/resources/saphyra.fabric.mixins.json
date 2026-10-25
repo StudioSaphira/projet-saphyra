@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.saphyra.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "CreativeTabSearchMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "CreativeTabOrderMixin"
+  ]
+}
