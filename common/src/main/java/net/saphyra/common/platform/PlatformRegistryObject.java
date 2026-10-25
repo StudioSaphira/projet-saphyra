@@ -4,8 +4,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.Supplier;
 
-public interface PlatformRegistryObject<T>
-        extends Supplier<T> {
+/** Shared PlatformRegistryObject implementation for consuming mods. */
+public interface PlatformRegistryObject<T> extends Supplier<T> {
 
     @Override
     T get();

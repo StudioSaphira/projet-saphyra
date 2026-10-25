@@ -84,3 +84,21 @@ class VanillaCommonSpec implements MinecraftJarProcessor.Spec {
 }
 
 loom.addMinecraftJarProcessor(VanillaCommonMinecraftProcessor)
+
+java { withSourcesJar() }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "saphyra-common-${rootProject.minecraft_version}"
+            artifact(tasks.named('jar')) { classifier = null }
+            artifact(tasks.named('sourcesJar')) { classifier = 'sources' }
+            pom {
+                name = 'Saphyra common'
+                description = 'Studio Saphira shared platform for Minecraft 1.21.1'
+            }
+        }
+    }
+}
+
+base { archivesName = "saphyra-common-${rootProject.minecraft_version}" }

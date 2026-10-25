@@ -29,7 +29,7 @@ neoForge {
     }
 
     mods {
-        scp_genesis {
+        saphyra {
             sourceSet sourceSets.main
             sourceSet project(':common').sourceSets.main
         }
@@ -43,3 +43,37 @@ repositories {
 dependencies {
     implementation project(':common')
 }
+
+java { withSourcesJar() }
+
+tasks.named('jar') {
+    from(project(':common').sourceSets.main.output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.named('sourcesJar') {
+    from(project(':common').sourceSets.main.allSource)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+def publicationVersion = project.version.toString()
+tasks.named('processResources') {
+    inputs.property('version', publicationVersion)
+    filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) {
+        expand(version: publicationVersion)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "saphyra-neoforge-${rootProject.minecraft_version}"
+            artifact(tasks.named('jar')) { classifier = null }
+            artifact(tasks.named('sourcesJar')) { classifier = 'sources' }
+            pom {
+                name = 'Saphyra neoforge'
+                description = 'Studio Saphira shared platform for Minecraft 1.21.1'
+            }
+        }
+    }
+}
+
+base { archivesName = "saphyra-neoforge-${rootProject.minecraft_version}" }

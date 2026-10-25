@@ -1,25 +1,18 @@
 package net.saphyra.common.platform;
 
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.orevia.common.scps.readers.network.ReaderPacket;
 
+/**
+ * Shared loader operations. Payload registration and payload meaning belong to each consuming mod.
+ * Common exposes only Java and vanilla Minecraft types.
+ */
 public interface PlatformServicesImpl {
-    /** Sends a private reader-menu snapshot to its authorized player. */
-    void sendReader(net.minecraft.server.level.ServerPlayer player, ReaderPacket packet);
 
+    /** Sends a payload whose type was registered by its owning mod for this connection. */
+    void sendToPlayer(ServerPlayer player, CustomPacketPayload payload);
 
-    /**
-     * Returns the platform-specific model data provider.
-     */
-    PlatformModelData<?> modelData();
-
-    /**
-     * Requests a model data update for the specified BlockEntity.
-     */
+    /** Invalidates loader-specific model data after a block entity changes on the client. */
     void requestModelDataUpdate(BlockEntity blockEntity);
-
-    /**
-     * Returns the model data associated with the specified BlockEntity.
-     */
-    PlatformModelData.ModelData getModelData(BlockEntity blockEntity);
 }

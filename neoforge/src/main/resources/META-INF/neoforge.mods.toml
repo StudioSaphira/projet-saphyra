@@ -4,7 +4,7 @@ license="All rights reserved"
 
 [[mods]]
 modId="saphyra"
-version="0.1"
+version="${version}"
 displayName="Saphyra"
 displayURL="https://saphira-studio.com"
 logoFile="logo.png"
@@ -12,14 +12,14 @@ credits="Studio Saphira"
 authors="HeroFR"
 description="Saphyra is the core framework for Studio Saphira's Minecraft mods, providing shared utilities, common systems, and technical foundations to ensure consistency, compatibility, and seamless integration across projects."
 
-[[dependencies.scp_genesis]]
+[[dependencies.saphyra]]
     modId="neoforge"
     type="required"
     versionRange="[21.1.263,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.scp_genesis]]
+[[dependencies.saphyra]]
     modId="minecraft"
     type="required"
     versionRange="[1.21.1]"

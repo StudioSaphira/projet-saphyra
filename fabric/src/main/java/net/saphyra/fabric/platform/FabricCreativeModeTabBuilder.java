@@ -1,15 +1,15 @@
 package net.saphyra.fabric.platform;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-
 import net.saphyra.common.platform.PlatformCreativeModeTabBuilder;
 
 import java.util.function.Supplier;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 
+/** Shared FabricCreativeModeTabBuilder implementation for consuming mods. */
 public final class FabricCreativeModeTabBuilder implements PlatformCreativeModeTabBuilder {
 
     private final CreativeModeTab.Builder builder;
@@ -21,25 +21,20 @@ public final class FabricCreativeModeTabBuilder implements PlatformCreativeModeT
     }
 
     @Override
-    public PlatformCreativeModeTabBuilder title(
-            Component title
-    ) {
+    public PlatformCreativeModeTabBuilder title(Component title) {
         builder.title(title);
         return this;
     }
 
     @Override
-    public PlatformCreativeModeTabBuilder icon(
-            Supplier<ItemStack> icon
-    ) {
+    public PlatformCreativeModeTabBuilder icon(Supplier<ItemStack> icon) {
         builder.icon(icon);
         return this;
     }
 
     @Override
     public PlatformCreativeModeTabBuilder displayItems(
-            CreativeModeTab.DisplayItemsGenerator generator
-    ) {
+            CreativeModeTab.DisplayItemsGenerator generator) {
         builder.displayItems(generator);
         return this;
     }
@@ -47,15 +42,14 @@ public final class FabricCreativeModeTabBuilder implements PlatformCreativeModeT
     @Override
     public PlatformCreativeModeTabBuilder withSearchBar() {
         searchBar = true;
-        builder.backgroundTexture(ResourceLocation.withDefaultNamespace(
-                "textures/gui/container/creative_inventory/tab_item_search.png"));
+        builder.backgroundTexture(
+                ResourceLocation.withDefaultNamespace(
+                        "textures/gui/container/creative_inventory/tab_item_search.png"));
         return this;
     }
 
     @Override
-    public PlatformCreativeModeTabBuilder withTabsBefore(
-            ResourceLocation before
-    ) {
+    public PlatformCreativeModeTabBuilder withTabsBefore(ResourceLocation before) {
         predecessor = before;
         return this;
     }

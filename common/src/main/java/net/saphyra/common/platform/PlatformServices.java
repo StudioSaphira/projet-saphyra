@@ -2,54 +2,66 @@ package net.saphyra.common.platform;
 
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
- * Provides access to platform-specific implementations.
+ * Access to the shared backend installed by Saphyra's active loader.
  *
- * <p>The active loader installs its implementation before registering mod content.
- * A combined JAR cannot select its platform from the first ServiceLoader entry.</p>
+ * <p>Mods must not replace this backend. They may register their own service interfaces as
+ * extensions; an extension is identified by its interface class, so unrelated mods remain isolated.
  */
 public final class PlatformServices {
 
     private static volatile PlatformServicesImpl instance;
+    private static final Map<Class<?>, Object> EXTENSIONS = new HashMap<>();
 
+    private PlatformServices() {}
+
+    /** Installs the loader backend once, from Saphyra's entry point. */
     public static synchronized void initialize(PlatformServicesImpl implementation) {
-        java.util.Objects.requireNonNull(implementation, "implementation");
-        if (instance != null) throw new IllegalStateException("Platform services already initialized");
+        Objects.requireNonNull(implementation, "implementation");
+        if (instance != null) {
+            throw new IllegalStateException("Saphyra platform services already initialized");
+        }
         instance = implementation;
-        org.slf4j.LoggerFactory.getLogger(PlatformServices.class)
-                .info("SCP Genesis platform services: {}", implementation.getClass().getSimpleName());
     }
 
-    private PlatformServices() {
-    }
-
-    /**
-     * Returns the platform implementation.
-     */
+    /** Returns the backend after Saphyra initialization. */
     public static PlatformServicesImpl get() {
         PlatformServicesImpl services = instance;
-        if (services == null) throw new IllegalStateException("Platform services have not been initialized by the loader");
+        if (services == null) {
+            throw new IllegalStateException(
+                    "Saphyra has not initialized its platform services yet");
+        }
         return services;
     }
 
-    /**
-     * Returns the platform-specific model data provider.
-     */
-    public static PlatformModelData<?> modelData() {
-        return get().modelData();
-    }
-
-    /**
-     * Requests a model data update for the specified BlockEntity.
-     */
+    /** Requests a client-side model-data refresh without exposing a loader API to Common. */
     public static void requestModelDataUpdate(BlockEntity blockEntity) {
         get().requestModelDataUpdate(blockEntity);
     }
 
-    /**
-     * Returns the model data associated with the specified BlockEntity.
-     */
-    public static PlatformModelData.ModelData getModelData(BlockEntity blockEntity) {
-        return get().getModelData(blockEntity);
+    /** Installs one mod-owned implementation without replacing shared services. */
+    public static synchronized <T> void registerExtension(Class<T> contract, T implementation) {
+        Objects.requireNonNull(contract, "contract");
+        Objects.requireNonNull(implementation, "implementation");
+        if (!contract.isInterface()) {
+            throw new IllegalArgumentException("An extension contract must be an interface");
+        }
+        T checked = contract.cast(implementation);
+        if (EXTENSIONS.putIfAbsent(contract, checked) != null) {
+            throw new IllegalStateException("Extension already registered: " + contract.getName());
+        }
+    }
+
+    /** Looks up a mod extension; call only after that mod's loader initialization. */
+    public static synchronized <T> T extension(Class<T> contract) {
+        Object implementation = EXTENSIONS.get(Objects.requireNonNull(contract, "contract"));
+        if (implementation == null) {
+            throw new IllegalStateException("Missing platform extension: " + contract.getName());
+        }
+        return contract.cast(implementation);
     }
 }

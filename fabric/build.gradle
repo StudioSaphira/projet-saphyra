@@ -35,3 +35,45 @@ dependencies {
 tasks.named("processResources") {
     from(project(":common").sourceSets.main.resources)
 }
+java { withSourcesJar() }
+
+tasks.named('jar') {
+    from(project(':common').sourceSets.main.output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.named('sourcesJar') {
+    from(project(':common').sourceSets.main.allSource)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+def publicationVersion = project.version.toString()
+tasks.named('processResources') {
+    inputs.property('version', publicationVersion)
+    filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) {
+        expand(version: publicationVersion)
+    }
+}
+
+loom {
+    mods {
+        saphyra {
+            sourceSet sourceSets.main
+            sourceSet project(':common').sourceSets.main
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "saphyra-fabric-${rootProject.minecraft_version}"
+            artifact(tasks.named('remapJar')) { classifier = null }
+            artifact(tasks.named('remapSourcesJar')) { classifier = 'sources' }
+            pom {
+                name = 'Saphyra fabric'
+                description = 'Studio Saphira shared platform for Minecraft 1.21.1'
+            }
+        }
+    }
+}
+
+base { archivesName = "saphyra-fabric-${rootProject.minecraft_version}" }

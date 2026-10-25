@@ -3,26 +3,16 @@ package net.saphyra.common.constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * Global constants used throughout SCP: Genesis.
- */
+/** Global constants used throughout Saphyra. */
 public final class ModConstants {
 
-    /**
-     * Mod identifier.
-     */
+    /** Mod identifier. */
     public static final String MOD_ID = "saphyra";
 
-    /**
-     * Mod logger.
-     */
+    /** Mod logger. */
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LogManager.getLogger();
 
-    /**
-     * Prevent instantiation.
-     */
-    private ModConstants() {
-    }
-
+    /** Prevent instantiation. */
+    private ModConstants() {}
 }

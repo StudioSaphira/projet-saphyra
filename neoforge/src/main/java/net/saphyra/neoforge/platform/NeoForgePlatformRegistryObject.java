@@ -5,16 +5,14 @@ import net.saphyra.common.platform.PlatformRegistryObject;
 
 import java.util.function.Supplier;
 
-public final class NeoForgePlatformRegistryObject<T>
-        implements PlatformRegistryObject<T> {
+/** Shared NeoForgePlatformRegistryObject implementation for consuming mods. */
+public final class NeoForgePlatformRegistryObject<T> implements PlatformRegistryObject<T> {
 
     private final Supplier<? extends T> supplier;
     private final Supplier<ResourceLocation> idSupplier;
 
     public NeoForgePlatformRegistryObject(
-            Supplier<? extends T> supplier,
-            Supplier<ResourceLocation> idSupplier
-    ) {
+            Supplier<? extends T> supplier, Supplier<ResourceLocation> idSupplier) {
         this.supplier = supplier;
         this.idSupplier = idSupplier;
     }

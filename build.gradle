@@ -1,9 +1,10 @@
 plugins {
     id 'base'
+    id 'maven-publish'
 }
 
 group = 'net.saphyra'
-version = project.mod_version
+version = providers.gradleProperty("saphyraVersion").getOrElse("${mod_version}-${version_type}${version_id}")
 
 subprojects {
     group = rootProject.group
@@ -16,44 +17,27 @@ subprojects {
     }
 }
 
-tasks.register('buildJar', Jar) {
-
-    archiveFileName =
-            "${project.mod_id}-${project.mod_version}-${project.version_type}${project.version_id}-${project.minecraft_version}.jar"
-
-    dependsOn(
-            ':common:classes',
-            ':common:processResources',
-            ':fabric:classes',
-            ':fabric:processResources',
-            ':neoforge:classes',
-            ':neoforge:processResources'
-    )
-
-    from(project(':common').sourceSets.main.output)
-    from(project(':fabric').sourceSets.main.output)
-    from(project(':neoforge').sourceSets.main.output)
-
-    from(rootProject.projectDir) {
-        include 'README.md'
-        include 'CHANGELOG.md'
-        include 'LICENSE.md'
-        include 'NOTICE.md'
-    }
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    doLast {
-        println ""
-        println "========================================"
-        println " SCP GENESIS - JAR FINAL"
-        println "========================================"
-        println "Fichier : ${archiveFile.get().asFile.absolutePath}"
-        println "Taille  : ${archiveFile.get().asFile.length()} octets"
-        println "========================================"
-    }
+// Produce correctly mapped runtime artifacts for each loader.
+tasks.register('buildJar') {
+    group = 'build'
+    description = 'Builds the Fabric and NeoForge runtime JARs.'
+    dependsOn ':fabric:remapJar', ':neoforge:jar'
 }
+
 
 tasks.register('buildAll') {
     dependsOn 'buildJar'
+}
+
+// A local file repository requires no hosting or credentials.
+subprojects {
+    apply plugin: 'maven-publish'
+    publishing {
+        repositories {
+            maven {
+                name = 'Development'
+                url = rootProject.layout.buildDirectory.dir('repo')
+            }
+        }
+    }
 }
