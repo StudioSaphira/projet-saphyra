@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "saphyra",
+  "version": "0.1",
+  "name": "Saphyra",
+  "description": "Saphyra is the core framework for Studio Saphira's Minecraft mods, providing shared utilities, common systems, and technical foundations to ensure consistency, compatibility, and seamless integration across projects.",
+  "icon": "logo.png",
+  "authors": ["HeroFR","Studio Saphira"],
+  "environment": "*",
+
+  "entrypoints": {
+    "main": [
+      "net.saphyra.fabric.FabricSaphyra"
+    ],
+    "client": [
+      "net.saphyra.fabric.FabricSaphyraClient"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~1.21.1",
+    "fabric-api": ">=0.116.17+1.21.1"
+  }
+}

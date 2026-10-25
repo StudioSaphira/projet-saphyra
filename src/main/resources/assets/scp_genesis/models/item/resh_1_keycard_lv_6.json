@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/resh1_l6_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturestaskforces",
-    "particle": "scp_genesis:item/resh1_keycard_item"
-  }
-}

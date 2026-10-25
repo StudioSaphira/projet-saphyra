@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/alpha1_l4_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturestaskforces",
-    "particle": "scp_genesis:item/alpha1_keycard_item"
-  }
-}

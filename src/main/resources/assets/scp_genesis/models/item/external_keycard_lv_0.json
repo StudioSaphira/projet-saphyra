@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/external_l0_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturesgeneral",
-    "particle": "scp_genesis:item/external_keycard_item"
-  }
-}

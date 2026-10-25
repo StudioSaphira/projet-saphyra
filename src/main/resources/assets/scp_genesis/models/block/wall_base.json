@@ -1,9 +1,0 @@
-{
-  "parent": "scp_genesis:custom/wallbase",
-  "textures": {
-    "all": "scp_genesis:block/wallbase_texture",
-    "particle": "scp_genesis:block/wallbase_particle_texture",
-    "0": "scp_genesis:block/wallbase_texture"
-  },
-  "render_type": "cutout"
-}

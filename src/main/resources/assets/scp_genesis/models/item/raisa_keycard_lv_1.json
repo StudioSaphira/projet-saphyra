@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "scp_genesis:item/keycard_raisa"
-  }
-}

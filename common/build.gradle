@@ -1,0 +1,86 @@
+import net.fabricmc.loom.api.processor.MinecraftJarProcessor
+import net.fabricmc.loom.api.processor.SpecContext
+import net.fabricmc.loom.api.processor.ProcessorContext
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.tree.ClassNode
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Path
+
+
+plugins {
+    id 'java-library'
+    id 'fabric-loom' version '1.17.19'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(
+                rootProject.java_version as int
+        )
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+
+    mappings loom.officialMojangMappings()
+}
+
+// Keep the Minecraft compile dependency free of loader-specific side annotations.
+
+/** Removes only Loom's side annotations from Common's private, processed Minecraft dependency. */
+class VanillaCommonMinecraftProcessor implements MinecraftJarProcessor<VanillaCommonSpec> {
+    @Override String getName() { return 'vanilla-common-side-annotations-v1' }
+    @Override VanillaCommonSpec buildSpec(SpecContext context) { return new VanillaCommonSpec() }
+
+    @Override void processJar(Path jar, VanillaCommonSpec spec, ProcessorContext context) {
+        // Loom supplies a processed copy: never edit the shared original or Fabric's Minecraft JAR.
+        try (def archive = FileSystems.newFileSystem(jar, Collections.emptyMap())) {
+            try (def entries = Files.walk(archive.getPath('/'))) {
+                entries.filter { Files.isRegularFile(it) && it.toString().endsWith('.class') }.forEach { path ->
+                    def node = new ClassNode()
+                    new ClassReader(Files.readAllBytes(path)).accept(node, 0)
+                    boolean changed = VanillaCommonMinecraftProcessor.strip(node.visibleAnnotations) | VanillaCommonMinecraftProcessor.strip(node.invisibleAnnotations)
+                    for (def field : node.fields) {
+                        changed = VanillaCommonMinecraftProcessor.strip(field.visibleAnnotations) | VanillaCommonMinecraftProcessor.strip(field.invisibleAnnotations) | changed
+                    }
+                    for (def method : node.methods) {
+                        changed = VanillaCommonMinecraftProcessor.strip(method.visibleAnnotations) | VanillaCommonMinecraftProcessor.strip(method.invisibleAnnotations) | changed
+                    }
+                    if (changed) {
+                        def writer = new ClassWriter(0)
+                        node.accept(writer)
+                        Files.write(path, writer.toByteArray())
+                    }
+                }
+            }
+        }
+    }
+
+    static boolean strip(List annotations) {
+        if (annotations == null) return false
+        return annotations.removeIf { annotation ->
+            annotation.desc in ['Lnet/fabricmc/api/Environment;',
+                                'Lnet/fabricmc/api/EnvironmentInterface;',
+                                'Lnet/fabricmc/api/EnvironmentInterfaces;']
+        }
+    }
+}
+
+/** Stable equality and hash allow Loom to reuse the processed dependency across Gradle sessions. */
+class VanillaCommonSpec implements MinecraftJarProcessor.Spec {
+    @Override int hashCode() { return 1 }
+    @Override boolean equals(Object other) { return other instanceof VanillaCommonSpec }
+}
+
+loom.addMinecraftJarProcessor(VanillaCommonMinecraftProcessor)

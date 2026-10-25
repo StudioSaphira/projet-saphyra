@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/gamma8_l3_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturestaskforces",
-    "particle": "scp_genesis:item/gamma8_keycard_item"
-  }
-}

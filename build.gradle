@@ -1,37 +1,59 @@
 plugins {
-    id 'eclipse'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'base'
 }
 
+group = 'net.saphyra'
 version = project.mod_version
-base.archivesName = project.mod_id
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+subprojects {
+    group = rootProject.group
+    version = rootProject.version
 
-neoForge {
-    version = project.neoforge_version
-
-    runs {
-        client {
-            client()
-        }
-        server {
-            server()
-        }
-
-        configureEach {
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
-            logLevel = org.slf4j.event.Level.DEBUG
-        }
-    }
-
-    mods {
-        scp_genesis {
-            sourceSet sourceSets.main
-        }
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.neoforged.net/releases' }
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+tasks.register('buildJar', Jar) {
+
+    archiveFileName =
+            "${project.mod_id}-${project.mod_version}-${project.version_type}${project.version_id}-${project.minecraft_version}.jar"
+
+    dependsOn(
+            ':common:classes',
+            ':common:processResources',
+            ':fabric:classes',
+            ':fabric:processResources',
+            ':neoforge:classes',
+            ':neoforge:processResources'
+    )
+
+    from(project(':common').sourceSets.main.output)
+    from(project(':fabric').sourceSets.main.output)
+    from(project(':neoforge').sourceSets.main.output)
+
+    from(rootProject.projectDir) {
+        include 'README.md'
+        include 'CHANGELOG.md'
+        include 'LICENSE.md'
+        include 'NOTICE.md'
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    doLast {
+        println ""
+        println "========================================"
+        println " SCP GENESIS - JAR FINAL"
+        println "========================================"
+        println "Fichier : ${archiveFile.get().asFile.absolutePath}"
+        println "Taille  : ${archiveFile.get().asFile.length()} octets"
+        println "========================================"
+    }
+}
+
+tasks.register('buildAll') {
+    dependsOn 'buildJar'
 }

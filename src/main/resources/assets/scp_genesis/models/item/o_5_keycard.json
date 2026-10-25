@@ -1,8 +1,0 @@
-{
-  "parent": "scp_genesis:custom/o5_lx_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturesgeneral",
-    "1": "scp_genesis:block/keycardtexturesgeneral2",
-    "particle": "scp_genesis:item/o5_keycard_item"
-  }
-}

@@ -1,0 +1,45 @@
+plugins {
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(
+                rootProject.java_version as int
+        )
+    }
+}
+
+neoForge {
+    version = rootProject.neoforge_version
+
+    runs {
+        client {
+            client()
+        }
+
+        server {
+            server()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        scp_genesis {
+            sourceSet sourceSets.main
+            sourceSet project(':common').sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common')
+}

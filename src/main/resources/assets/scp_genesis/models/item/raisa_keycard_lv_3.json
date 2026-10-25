@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/raisa_l3_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturesgeneral",
-    "particle": "scp_genesis:item/raisa_keycard_item"
-  }
-}

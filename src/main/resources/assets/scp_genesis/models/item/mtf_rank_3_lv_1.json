@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/mtf-r3_l1-keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturestaskforces",
-    "particle": "scp_genesis:item/mtf-r3_keycard_item"
-  }
-}

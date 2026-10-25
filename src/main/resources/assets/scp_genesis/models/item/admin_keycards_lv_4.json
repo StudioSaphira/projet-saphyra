@@ -1,8 +1,0 @@
-{
-  "parent": "scp_genesis:custom/admin_l4_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturesgeneral",
-    "1": "scp_genesis:block/keycardtexturesgeneral2",
-    "particle": "scp_genesis:item/admin_keycard_item"
-  }
-}

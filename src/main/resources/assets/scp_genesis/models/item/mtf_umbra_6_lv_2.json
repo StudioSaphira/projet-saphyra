@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/umbra6_l2_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturestaskforces",
-    "particle": "scp_genesis:item/umbra6_keycard_item"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/mjd_l3_keycard",
-  "textures": {
-    "0": "scp_genesis:block/keycardtexturesgeneral",
-    "particle": "scp_genesis:item/mjd_keycard_item"
-  }
-}

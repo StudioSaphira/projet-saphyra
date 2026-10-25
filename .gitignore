@@ -13,7 +13,7 @@ out/
 .settings/
 
 # Assets_Dev
-assets_dev/
+assets_dev/Private
 
 # VSCode
 .vscode/

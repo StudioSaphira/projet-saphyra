@@ -1,7 +1,0 @@
-{
-  "parent": "scp_genesis:custom/idcard",
-  "textures": {
-    "1": "scp_genesis:block/idtexturesgeneral",
-    "particle": "scp_genesis:item/idcard"
-  }
-}
