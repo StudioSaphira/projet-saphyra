@@ -31,3 +31,6 @@ crash-reports/
 # OS
 Thumbs.db
 .DS_Store
+
+# Others
+docs/
