@@ -42,7 +42,6 @@ public final class LightingRuntime {
 
     /** Called by either loader's end-client-tick callback. */
     public static void tick() {
-        LightingDemo.tick();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != world) reset(minecraft.level);
         StaticLighting.tick(minecraft.level);
