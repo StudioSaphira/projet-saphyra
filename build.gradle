@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'net.saphyra'
-version = providers.gradleProperty("saphyraVersion").getOrElse("${mod_version}-${version_type}${version_id}")
+version = project.mod_version
 
 subprojects {
     group = rootProject.group
@@ -29,7 +29,7 @@ tasks.register('prepareUniversalMetadata', Copy) {
 tasks.register('buildJar', Jar) {
     group = 'build'
     description = 'Builds one universal Saphyra JAR for Fabric and NeoForge.'
-    archiveFileName = "${project.mod_id}-${project.version}-${project.minecraft_version}.jar"
+    archiveFileName = "${project.mod_id}-${project.mod_version}-${project.minecraft_version}.jar"
     destinationDirectory = layout.buildDirectory.dir('distributions')
     dependsOn 'prepareUniversalMetadata', ':fabric:remapJar', ':neoforge:jar'
 
