@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.saphyra.fabric.mixin.lighting",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "LightingShaderMixin",
+    "LightingWorldMixin",
+    "LightingChangesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -12,5 +12,6 @@ public final class NeoForgeSaphyraClient {
                 net.saphyra.common.platform.RenderingPlatform.class,
                 new net.saphyra.neoforge.platform.NeoForgeRenderingPlatform());
         net.saphyra.neoforge.client.rendering.NeoForgeOutlineEvents.register();
+        net.saphyra.neoforge.client.lighting.NeoForgeLighting.initialize();
     }
 }

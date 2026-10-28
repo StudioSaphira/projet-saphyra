@@ -12,5 +12,6 @@ public final class FabricSaphyraClient implements ClientModInitializer {
                 net.saphyra.common.platform.RenderingPlatform.class,
                 new net.saphyra.fabric.platform.FabricRenderingPlatform());
         net.saphyra.fabric.client.rendering.FabricOutlineEvents.register();
+        net.saphyra.fabric.client.lighting.FabricLighting.initialize();
     }
 }
