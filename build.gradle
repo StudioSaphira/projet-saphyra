@@ -17,15 +17,43 @@ subprojects {
     }
 }
 
-// Produce correctly mapped runtime artifacts for each loader.
-tasks.register('buildJar') {
-    group = 'build'
-    description = 'Builds the Fabric and NeoForge runtime JARs.'
-    dependsOn ':fabric:remapJar', ':neoforge:jar'
+// Keep loader-specific bytecode isolated inside one distributable archive.
+// Maven publications still expose the individual loader artifacts.
+tasks.register('prepareUniversalMetadata', Copy) {
+    from('distribution')
+    into(layout.buildDirectory.dir('universal-metadata'))
+    inputs.property('version', project.version.toString())
+    expand(version: project.version.toString())
 }
 
+tasks.register('buildJar', Jar) {
+    group = 'build'
+    description = 'Builds one universal Saphyra JAR for Fabric and NeoForge.'
+    archiveFileName = "${project.mod_id}-${project.version}-${project.minecraft_version}.jar"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    dependsOn 'prepareUniversalMetadata', ':fabric:remapJar', ':neoforge:jar'
+
+    from(tasks.named('prepareUniversalMetadata'))
+    into('META-INF/jars') {
+        from(project(':fabric').tasks.named('remapJar').flatMap { it.archiveFile }) {
+            rename { 'saphyra-fabric.jar' }
+        }
+        from(project(':neoforge').tasks.named('jar').flatMap { it.archiveFile }) {
+            rename { 'saphyra-neoforge.jar' }
+        }
+    }
+    from(rootProject.projectDir) {
+        include 'LICENSE.md', 'NOTICE.md', 'README.md', 'CHANGELOG.md'
+    }
+    duplicatesStrategy = DuplicatesStrategy.FAIL
+    doLast {
+        logger.lifecycle("Saphyra universal JAR: ${archiveFile.get().asFile.absolutePath}")
+    }
+}
 
 tasks.register('buildAll') {
+    group = 'build'
+    description = 'Builds the universal distribution JAR.'
     dependsOn 'buildJar'
 }
 
