@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.saphyra.fabric.compat.iris.mixin",
+  "plugin": "net.saphyra.fabric.compat.iris.FabricIrisMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "IrisSourceMixin",
+    "IrisSamplersMixin",
+    "IrisUniformsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

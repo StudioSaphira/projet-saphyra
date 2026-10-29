@@ -46,7 +46,7 @@ public final class LightingRuntime {
 
     /** Called by either loader's end-client-tick callback. */
     public static void tick() {
-        LightingDemo.tick();
+        // LightingDemo.tick();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != world) reset(minecraft.level);
         StaticLighting.tick(minecraft.level);
@@ -141,6 +141,16 @@ public final class LightingRuntime {
         rendering = true;
     }
 
+    /** Current GPU textures, resolved lazily by optional shader-pack sampler bindings. */
+    public static int lightingTexture(String name) {
+        return switch (name) {
+            case "SaphyraLightVolume" -> texture == null ? 0 : texture.getId();
+            case "SaphyraStaticAtlas" -> StaticLighting.ATLAS.atlasTexture();
+            case "SaphyraStaticPages" -> StaticLighting.ATLAS.pageTexture();
+            default -> throw new IllegalArgumentException("Unknown light texture: " + name);
+        };
+    }
+
     public static void endFrame() { rendering = false; }
 
     /** Supplies extra core-shader parameters; GUI and unavailable volumes retain exact vanilla lighting. */
@@ -154,6 +164,7 @@ public final class LightingRuntime {
         boolean dynamicAvailable = texture != null && textureOrigin != null;
         boolean active = rendering && camera != null && (dynamicAvailable || StaticLighting.ATLAS.available());
         shader.scalar("SaphyraLightEnabled", active ? 1f : 0f);
+        shader.scalar("SaphyraIrisManaged", 1f);
         if (!active) return;
         StaticLighting.ATLAS.apply(shader, camera);
         shader.scalar("SaphyraDynamicEnabled", dynamicAvailable ? 1f : 0f);

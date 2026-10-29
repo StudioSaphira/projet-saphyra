@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.saphyra.neoforge.compat.iris.mixin",
+  "plugin": "net.saphyra.neoforge.compat.iris.NeoForgeIrisMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "IrisSourceMixin",
+    "IrisSamplersMixin",
+    "IrisUniformsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

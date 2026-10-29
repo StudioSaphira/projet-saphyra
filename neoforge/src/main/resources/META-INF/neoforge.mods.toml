@@ -31,3 +31,6 @@ config="saphyra.neoforge.lighting.mixins.json"
 
 [[mixins]]
 config="saphyra.neoforge.sodium.mixins.json"
+
+[[mixins]]
+config="saphyra.neoforge.iris.mixins.json"

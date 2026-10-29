@@ -41,10 +41,8 @@ vec4 saphyra_field(vec3 p, bool fixedLight) {
                    mix(saphyra_sample(b+ivec3(0,1,1),fixedLight), saphyra_sample(b+ivec3(1,1,1),fixedLight), f.x), f.y), f.z);
 }
 
-vec4 saphyra_lightmap_relative(sampler2D lightmap, vec2 lightUV, vec3 relative, vec3 n) {
-    vec2 originalUV = clamp(lightUV, vec2(0.03125), vec2(0.96875));
-    vec4 original = texture(lightmap, originalUV);
-    if (SaphyraLightEnabled < 0.5) return original;
+vec4 saphyra_light_field(vec3 relative, vec3 n) {
+    if (SaphyraLightEnabled < 0.5) return vec4(0.0);
     if (dot(n,n) > 0.001) relative += normalize(n) * 0.52;
     vec4 field = vec4(0.0);
     if (SaphyraStaticEnabled > 0.5) field = saphyra_field(relative + SaphyraStaticOffset - vec3(0.5), true);
@@ -54,6 +52,14 @@ vec4 saphyra_lightmap_relative(sampler2D lightmap, vec2 lightUV, vec3 relative, 
         edge = min(edge,min(min(64.0-local.x,64.0-local.y),64.0-local.z));
         if (edge > 15.0) field = max(field, saphyra_field(local - vec3(0.5), false) * clamp((edge-15.0)/3.0,0.0,1.0));
     }
+    return field;
+}
+
+vec4 saphyra_lightmap_relative(sampler2D lightmap, vec2 lightUV, vec3 relative, vec3 n) {
+    vec2 originalUV = clamp(lightUV, vec2(0.03125), vec2(0.96875));
+    vec4 original = texture(lightmap, originalUV);
+    if (SaphyraLightEnabled < 0.5) return original;
+    vec4 field = saphyra_light_field(relative, n);
     float blend = clamp(field.a * 15.0,0.0,1.0);
     if (blend <= 0.0) return original;
     vec3 illumination;

@@ -9,6 +9,12 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 /** GPU atlas of stable world sections. The page table locates a section regardless of viewer distance. */
 public final class StaticLightAtlas implements AutoCloseable {
 
+    /** Returns the current atlas name; Iris resolves it again after each atlas replacement. */
+    public int atlasTexture() { return atlas == null ? 0 : atlas.getId(); }
+
+    /** Returns the current page-table name, or zero before the first upload. */
+    public int pageTexture() { return pages == null ? 0 : pages.getId(); }
+
     private DynamicTexture atlas, pages;
     private int minX, minY, minZ, sizeX, sizeY, sizeZ, columns;
 

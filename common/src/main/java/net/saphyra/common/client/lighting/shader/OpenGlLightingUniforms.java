@@ -13,11 +13,18 @@ import org.lwjgl.system.MemoryStack;
 public final class OpenGlLightingUniforms implements LightingUniforms {
 
     private final int program;
+    private final boolean externalSamplers;
     private final Map<String, Integer> locations = new HashMap<>();
     private final int[] textures = new int[3], samplers = new int[3];
     private final boolean[] borrowed = new boolean[3];
 
-    public OpenGlLightingUniforms(int program) { this.program = program; }
+    public OpenGlLightingUniforms(int program) { this(program, false); }
+
+    /** Iris owns sampler allocation; native Sodium programs borrow and restore units instead. */
+    public OpenGlLightingUniforms(int program, boolean externalSamplers) {
+        this.program = program;
+        this.externalSamplers = externalSamplers;
+    }
 
     private int location(String name) {
         return locations.computeIfAbsent(name, key -> GL20C.glGetUniformLocation(program, key));
@@ -50,6 +57,7 @@ public final class OpenGlLightingUniforms implements LightingUniforms {
 
     @Override
     public void sampler(String name, int texture) {
+        if (externalSamplers || has("SaphyraIrisManaged")) return;
         int uniform = location(name);
         if (uniform < 0) return;
         int index = switch (name) {
