@@ -1,5 +1,9 @@
 package net.saphyra.common.client.lighting;
 
+import net.saphyra.common.client.lighting.shader.VanillaLightingUniforms;
+
+import net.saphyra.common.client.lighting.shader.LightingUniforms;
+
 import com.mojang.blaze3d.platform.NativeImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public final class LightingRuntime {
 
     /** Called by either loader's end-client-tick callback. */
     public static void tick() {
+        LightingDemo.tick();
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != world) reset(minecraft.level);
         StaticLighting.tick(minecraft.level);
@@ -140,19 +145,23 @@ public final class LightingRuntime {
 
     /** Supplies extra core-shader parameters; GUI and unavailable volumes retain exact vanilla lighting. */
     public static void apply(ShaderInstance shader) {
-        var enabled = shader.getUniform("SaphyraLightEnabled");
-        if (enabled == null) return;
+        apply(new VanillaLightingUniforms(shader));
+    }
+
+    /** Shares the existing RGB state with optional renderer adapters. No Sodium API is referenced. */
+    public static void apply(LightingUniforms shader) {
+        if (!shader.has("SaphyraLightEnabled")) return;
         boolean dynamicAvailable = texture != null && textureOrigin != null;
         boolean active = rendering && camera != null && (dynamicAvailable || StaticLighting.ATLAS.available());
-        enabled.set(active ? 1.0f : 0.0f);
+        shader.scalar("SaphyraLightEnabled", active ? 1f : 0f);
         if (!active) return;
         StaticLighting.ATLAS.apply(shader, camera);
-        shader.safeGetUniform("SaphyraDynamicEnabled").set(dynamicAvailable ? 1f : 0f);
-        if (dynamicAvailable) shader.setSampler("SaphyraLightVolume", texture.getId());
-        var offset = shader.getUniform("SaphyraCameraOffset");
-        var view = shader.getUniform("SaphyraInverseView");
-        if (offset != null && dynamicAvailable) offset.set((float) (camera.getPosition().x - textureOrigin.getX()),
-                (float) (camera.getPosition().y - textureOrigin.getY()), (float) (camera.getPosition().z - textureOrigin.getZ()));
-        if (view != null) view.set(inverseView);
+        shader.scalar("SaphyraDynamicEnabled", dynamicAvailable ? 1f : 0f);
+        if (dynamicAvailable) {
+            shader.sampler("SaphyraLightVolume", texture.getId());
+            shader.vector("SaphyraCameraOffset", (float)(camera.getPosition().x - textureOrigin.getX()),
+                    (float)(camera.getPosition().y - textureOrigin.getY()), (float)(camera.getPosition().z - textureOrigin.getZ()));
+        }
+        shader.matrix("SaphyraInverseView", inverseView);
     }
 }
