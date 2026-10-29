@@ -2,14 +2,39 @@
   "schemaVersion": 1,
   "id": "saphyra",
   "version": "${version}",
+  "icon": "logo.png",
   "name": "Saphyra",
   "description": "Saphyra is the core framework for Studio Saphira's Minecraft mods, providing shared utilities, common systems, and technical foundations to ensure consistency, compatibility, and seamless integration across projects.",
-  "icon": "logo.png",
+  "license": "All Right Reserved",
+
   "authors": [
     "HeroFR",
     "Studio Saphira"
   ],
+  "contributors": [
+    ""
+  ],
+
+  "contact": {
+    "homepage": "https://saphira-studio.com",
+    "sources": "https://github.com/StudioSaphira/projet-saphyra",
+    "issues": "https://github.com/StudioSaphira/projet-saphyra/issues"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/zxkCtEm2YQ",
+        "modmenu.modrinth": "https://modrinth.com/mod/saphyra",
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/saphyra",
+        "modmenu.kofi": "https://ko-fi.com/studiosaphira"
+      },
+      "badges": ["library"]
+    }
+  },
+
   "environment": "*",
+
   "entrypoints": {
     "main": [
       "net.saphyra.fabric.FabricSaphyra"
@@ -21,12 +46,14 @@
       "net.saphyra.fabric.compat.iris.FabricIrisBootstrap"
     ]
   },
+
   "depends": {
     "fabricloader": ">=0.19.5",
     "minecraft": "~1.21.1",
     "fabric-api": ">=0.116.17+1.21.1",
     "java": ">=21"
   },
+
   "mixins": [
     "saphyra.fabric.mixins.json",
     "saphyra.fabric.lighting.mixins.json",

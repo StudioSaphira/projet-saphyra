@@ -8,7 +8,7 @@ version="${version}"
 displayName="Saphyra"
 displayURL="https://saphira-studio.com"
 logoFile="logo.png"
-credits="Studio Saphira"
+credits="Developed by Studio Saphira"
 authors="HeroFR"
 description="Saphyra is the core framework for Studio Saphira's Minecraft mods, providing shared utilities, common systems, and technical foundations to ensure consistency, compatibility, and seamless integration across projects."
 
