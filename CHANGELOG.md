@@ -1,3 +1,17 @@
+# Beta-Release 3 - 0.3 - First Compatibility
+
+## Additions
+- Compatibility to Sodium
+- Compatibility to Iris and some shaders, listed down below :
+  - Bliss
+  - BSL
+  - Complementary Reimagined/Unbound
+  - MakeUp-UltraFast
+  - Photon
+  - Solas
+
+------------------------------------------------------------------
+
 # Beta-Release 2 - 0.2 - Rendering
 
 ## Additions 
