@@ -3,7 +3,7 @@ package net.saphyra.common.client.lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.Map;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.saphyra.common.client.lighting.shader.LightingUniforms;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 
 /** GPU atlas of stable world sections. The page table locates a section regardless of viewer distance. */
@@ -50,17 +50,16 @@ public final class StaticLightAtlas implements AutoCloseable {
     public boolean available() { return atlas != null; }
 
     /** Supplies world-relative coordinates, avoiding float precision loss far from world origin. */
-    public void apply(ShaderInstance shader, Camera camera) {
-        var enabled = shader.getUniform("SaphyraStaticEnabled");
-        if (enabled == null) return;
-        enabled.set(available() ? 1f : 0f);
+    public void apply(LightingUniforms shader, Camera camera) {
+        if (!shader.has("SaphyraStaticEnabled")) return;
+        shader.scalar("SaphyraStaticEnabled", available() ? 1f : 0f);
         if (!available()) return;
-        shader.setSampler("SaphyraStaticAtlas", atlas.getId());
-        shader.setSampler("SaphyraStaticPages", pages.getId());
-        shader.safeGetUniform("SaphyraStaticOffset").set((float)(camera.getPosition().x - minX * 16.0),
+        shader.sampler("SaphyraStaticAtlas", atlas.getId());
+        shader.sampler("SaphyraStaticPages", pages.getId());
+        shader.vector("SaphyraStaticOffset", (float)(camera.getPosition().x - minX * 16.0),
                 (float)(camera.getPosition().y - minY * 16.0), (float)(camera.getPosition().z - minZ * 16.0));
-        shader.safeGetUniform("SaphyraStaticSize").set((float)sizeX, (float)sizeY, (float)sizeZ);
-        shader.safeGetUniform("SaphyraStaticColumns").set((float)columns);
+        shader.vector("SaphyraStaticSize", (float)sizeX, (float)sizeY, (float)sizeZ);
+        shader.scalar("SaphyraStaticColumns", (float)columns);
     }
 
     @Override

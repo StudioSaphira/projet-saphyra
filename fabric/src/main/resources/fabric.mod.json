@@ -26,6 +26,7 @@
   },
   "mixins": [
     "saphyra.fabric.mixins.json",
-    "saphyra.fabric.lighting.mixins.json"
+    "saphyra.fabric.lighting.mixins.json",
+    "saphyra.fabric.sodium.mixins.json"
   ]
 }

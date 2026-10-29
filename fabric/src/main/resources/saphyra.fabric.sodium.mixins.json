@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.saphyra.fabric.compat.sodium",
+  "plugin": "net.saphyra.fabric.compat.sodium.FabricSodiumMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SodiumShaderLoaderMixin",
+    "SodiumProgramMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

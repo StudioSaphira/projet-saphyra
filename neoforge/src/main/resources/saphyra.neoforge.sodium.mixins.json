@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.saphyra.neoforge.compat.sodium",
+  "plugin": "net.saphyra.neoforge.compat.sodium.NeoForgeSodiumMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SodiumShaderLoaderMixin",
+    "SodiumProgramMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

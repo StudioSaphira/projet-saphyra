@@ -41,13 +41,10 @@ vec4 saphyra_field(vec3 p, bool fixedLight) {
                    mix(saphyra_sample(b+ivec3(0,1,1),fixedLight), saphyra_sample(b+ivec3(1,1,1),fixedLight), f.x), f.y), f.z);
 }
 
-vec4 saphyra_lightmap(sampler2D lightmap, ivec2 uv, vec3 position, vec3 normal) {
-    vec2 originalUV = clamp(vec2(uv)/256.0, vec2(0.03125), vec2(0.96875));
+vec4 saphyra_lightmap_relative(sampler2D lightmap, vec2 lightUV, vec3 relative, vec3 n) {
+    vec2 originalUV = clamp(lightUV, vec2(0.03125), vec2(0.96875));
     vec4 original = texture(lightmap, originalUV);
     if (SaphyraLightEnabled < 0.5) return original;
-    mat4 transform = SaphyraInverseView * ModelViewMat;
-    vec3 relative = (transform * vec4(position,1.0)).xyz;
-    vec3 n = mat3(transform) * normal;
     if (dot(n,n) > 0.001) relative += normalize(n) * 0.52;
     vec4 field = vec4(0.0);
     if (SaphyraStaticEnabled > 0.5) field = saphyra_field(relative + SaphyraStaticOffset - vec3(0.5), true);
@@ -65,3 +62,12 @@ vec4 saphyra_lightmap(sampler2D lightmap, ivec2 uv, vec3 position, vec3 normal) 
     illumination.b = texture(lightmap,vec2(clamp(field.b*0.9375+0.03125,0.03125,0.96875),originalUV.y)).b;
     return vec4(mix(original.rgb,illumination,blend),original.a);
 }
+
+
+#ifndef SAPHYRA_EXTERNAL_TRANSFORM
+vec4 saphyra_lightmap(sampler2D lightmap, ivec2 uv, vec3 position, vec3 normal) {
+    mat4 transform = SaphyraInverseView * ModelViewMat;
+    return saphyra_lightmap_relative(lightmap, vec2(uv)/256.0,
+            (transform * vec4(position,1.0)).xyz, mat3(transform)*normal);
+}
+#endif

@@ -28,3 +28,6 @@ description="Saphyra is the core framework for Studio Saphira's Minecraft mods, 
 
 [[mixins]]
 config="saphyra.neoforge.lighting.mixins.json"
+
+[[mixins]]
+config="saphyra.neoforge.sodium.mixins.json"

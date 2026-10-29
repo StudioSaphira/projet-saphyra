@@ -2,5 +2,19 @@
   "pack": {
     "pack_format": 48,
     "description": "Core mod for Studio Saphira"
+  },
+  "sodium": {
+    "ignored_shaders": [
+      "rendertype_cutout_mipped.json",
+      "rendertype_cutout_mipped.vsh",
+      "rendertype_cutout.json",
+      "rendertype_cutout.vsh",
+      "rendertype_solid.json",
+      "rendertype_solid.vsh",
+      "rendertype_translucent.json",
+      "rendertype_translucent.vsh",
+      "rendertype_tripwire.json",
+      "rendertype_tripwire.vsh"
+    ]
   }
 }
