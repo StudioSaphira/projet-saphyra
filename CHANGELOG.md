@@ -1,3 +1,14 @@
+# Beta-Release 4 - 0.4 - 
+
+## Additions
+- 
+
+## Changes
+- Changed internal logo
+- Changed NeoForge/Fabric metadata
+
+------------------------------------------------------------------
+
 # Beta-Release 3 - 0.3 - First Compatibility
 
 ## Additions
